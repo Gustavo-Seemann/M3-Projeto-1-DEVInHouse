@@ -37,7 +37,7 @@ def create_user(data, validate=True):
         new_user = User.seed(data)
         result = user_share_schema.dump(new_user)
 
-        return result
+        return {"message": "Usuário foi criado com sucesso."}
     except Exception as e:
         return {"error": f"{e}", "status_code": 500}
 

@@ -166,7 +166,7 @@ def logout():
     return jsonify({"message": "Você foi deslogado"}), 200
 
 
-@user.route("/", methods=["POST"])
+@user.route("/create", methods=["POST"])
 @requires_access_level(["READ", "WRITE", "UPDATE", "DELETE"])
 def create():
     """Example endpoint public in the database a user
