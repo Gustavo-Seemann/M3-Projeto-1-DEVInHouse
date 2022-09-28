@@ -68,3 +68,43 @@ def test_exist_email_db(client, logged_in_client):
     assert response.status_code == 400
     assert response.json['error'] == "{'email': ['Email já registrado']}"
 
+def test_invalid_phone_lenght(client, logged_in_client):
+    headers = {
+        'Content-type': mimetype,
+        'Accept': mimetype
+    }
+    headers["Authorization"] = f"Bearer {logged_in_client}"
+    data = {
+        "city_id": 1566, 
+        "gender_id" : 1, 
+        "role_id" : 1, 
+        "name" : "Anderson van Hallen", 
+        "email" : "anderson-teste@email.com",
+        "age" : "04/04/1993",
+        "phone" : "4899999",
+        "password" : "Teste12345!"
+    }
+    response = client.post(url, data=json.dumps(data), headers=headers)
+    assert response.status_code == 400
+    assert response.json['error'] == "{'phone': ['Telefone inválido']}"
+
+
+def test_invalid_phone_characters(client, logged_in_client):
+    headers = {
+        'Content-type': mimetype,
+        'Accept': mimetype
+    }
+    headers["Authorization"] = f"Bearer {logged_in_client}"
+    data = {
+        "city_id": 1566, 
+        "gender_id" : 1, 
+        "role_id" : 1, 
+        "name" : "Anderson van Hallen", 
+        "email" : "anderson-teste@email.com",
+        "age" : "04/04/1993",
+        "phone" : "4999834224#",
+        "password" : "Teste12345!"
+    }
+    response = client.post(url, data=json.dumps(data), headers=headers)
+    assert response.status_code == 400
+    assert response.json['error'] == "{'phone': ['Telefone inválido']}"
