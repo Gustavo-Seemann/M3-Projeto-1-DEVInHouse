@@ -25,6 +25,25 @@ def test_sucess_create_user(client, logged_in_client):
     assert response.json['message'] == "Usuário foi criado com sucesso."
 
 
+def test_not_authorized_create_user(client):
+    headers = {
+        'Content-type': mimetype,
+        'Accept': mimetype
+    }
+    data = {
+        "city_id": 1566, 
+        "gender_id" : 1, 
+        "role_id" : 1, 
+        "name" : "Anderson van Hallen", 
+        "email" : "anderson-teste@email.com",
+        "age" : "04/04/1993",
+        "password" : "Teste12345!"
+    }
+    response = client.post(url, data=json.dumps(data), headers=headers)
+    assert response.status_code == 403
+    assert response.json['error'] == "Você não tem permissão"
+
+
 def test_missing_field_create(client, logged_in_client):
     headers = {
         'Content-type': mimetype,
