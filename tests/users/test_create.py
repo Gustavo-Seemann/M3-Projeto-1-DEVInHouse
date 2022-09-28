@@ -4,6 +4,7 @@ from flask import json
 mimetype = 'application/json'
 url = "/user/create"
 
+
 def test_sucess_create_user(client, logged_in_client):
     headers = {
         'Content-type': mimetype,
@@ -68,7 +69,8 @@ def test_exist_email_db(client, logged_in_client):
     assert response.status_code == 400
     assert response.json['error'] == "{'email': ['Email já registrado']}"
 
-def test_invalid_phone_lenght(client, logged_in_client):
+
+def test_invalid_phone_length(client, logged_in_client):
     headers = {
         'Content-type': mimetype,
         'Accept': mimetype
@@ -108,3 +110,47 @@ def test_invalid_phone_characters(client, logged_in_client):
     response = client.post(url, data=json.dumps(data), headers=headers)
     assert response.status_code == 400
     assert response.json['error'] == "{'phone': ['Telefone inválido']}"
+
+
+def test_password_length(client, logged_in_client):
+    headers = {
+        'Content-type': mimetype,
+        'Accept': mimetype
+    }
+    headers["Authorization"] = f"Bearer {logged_in_client}"
+    data = {
+        "city_id": 1566, 
+        "gender_id" : 1, 
+        "role_id" : 1, 
+        "name" : "Anderson van Hallen", 
+        "email" : "anderson-teste@email.com",
+        "age" : "04/04/1993",
+        "phone" : "48999999999",
+        "password" : "Teste3!"
+    }
+    response = client.post(url, data=json.dumps(data), headers=headers)
+    assert response.status_code == 400
+    assert response.json['error'] == "{'password': ['Senha fraca, utilize letras maiúsculas, minúsculas, números e caracteres especiais']}"
+
+
+def test_password_length(client, logged_in_client):
+    headers = {
+        'Content-type': mimetype,
+        'Accept': mimetype
+    }
+    headers["Authorization"] = f"Bearer {logged_in_client}"
+    data = {
+        "city_id": 1566, 
+        "gender_id" : 1, 
+        "role_id" : 1, 
+        "name" : "Anderson van Hallen", 
+        "email" : "anderson-teste@email.com",
+        "age" : "04/04/1993",
+        "phone" : "48999999999",
+        "password" : "Teste12345678"
+    }
+    response = client.post(url, data=json.dumps(data), headers=headers)
+    assert response.status_code == 400
+    assert response.json['error'] == "{'password': ['Senha fraca, utilize letras maiúsculas, minúsculas, números e caracteres especiais']}"
+
+
