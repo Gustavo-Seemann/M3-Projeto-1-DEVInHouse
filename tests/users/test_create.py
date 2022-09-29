@@ -2,7 +2,7 @@ import random
 from flask import json
 
 mimetype = 'application/json'
-url = "/user/create"
+url = "/user/"
 
 
 def test_sucess_create_user(client, logged_in_client):
