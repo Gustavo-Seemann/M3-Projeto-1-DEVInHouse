@@ -449,21 +449,22 @@ def update_user_by_id(id):
   data = request.get_json()
   list_keys = ["role_id", "gender_id", "city_id", "age", "name", "email", "phone", "password", "cep", "street", "district", "number_street", "complement", "landmark"]
   
-  if not user:
+  if user == None:
     return Response(
-        response=jsonify({"message": "Usuario nao encontrado."}),
+        response=json.dumps({"message": "Usuario nao encontrado."}),
         status=404,
-        mimetype="application/json",
+        mimetype="application/json"
   )
-  validate_values_keys = validate_fields_nulls(data, list_keys)
-  if validate_values_keys is not None and 'error' in validate_values_keys:
+  else:
+    validate_values_keys = validate_fields_nulls(data, list_keys)
+    if validate_values_keys is not None and 'error' in validate_values_keys:
+      return Response(
+          response=json.dumps(validate_values_keys), status=400, mimetype="application/json"
+    )
+    user.update(data)
+    result = user_share_schema.dump(user)
     return Response(
-        response=json.dumps(validate_values_keys), status=400, mimetype="application/json"
-  )
-  user.update(data)
-  result = user_share_schema.dump(user)
-  return Response(
-      response=json.dumps(result), 
-      status=204, 
-      mimetype="application/json"
-  )
+        response=json.dumps(result), 
+        status=204, 
+        mimetype="application/json"
+    )
