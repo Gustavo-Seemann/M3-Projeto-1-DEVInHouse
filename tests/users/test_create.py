@@ -44,7 +44,7 @@ def test_not_authorized_create_user(client):
     assert response.json['error'] == "Você não tem permissão"
 
 
-def test_missing_field_create(client, logged_in_client):
+def test_missing_field_create_user(client, logged_in_client):
     headers = {
         'Content-type': mimetype,
         'Accept': mimetype
