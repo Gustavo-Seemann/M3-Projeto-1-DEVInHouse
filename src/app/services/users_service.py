@@ -1,10 +1,14 @@
 import re
 from datetime import datetime, timedelta, timezone
 
+from requests import Response
+
+from src.app.models.permission import Permission
 from src.app.models.role import Role, role_share_schema
 from src.app.models.schemas.user_schema import user_create_schema
 from src.app.models.user import User, user_share_schema
-from src.app.utils import excludeNone, generate_jwt
+from src.app.utils import excludeNone, generate_jwt, format_date
+
 
 
 def login_user(email: str, password: str):
@@ -37,7 +41,7 @@ def create_user(data, validate=True):
         new_user = User.seed(data)
         result = user_share_schema.dump(new_user)
 
-        return result
+        return {"message": "Usuário foi criado com sucesso."}
     except Exception as e:
         return {"error": f"{e}", "status_code": 500}
 
@@ -90,3 +94,42 @@ def format_print_user(self):
         "phone": self["phone"],
         "role": role["name"],
     }
+
+def create_role(data):
+
+    roles_in_db = Role.query.all()
+    roles = []
+
+    for role in roles_in_db:
+        roles.append(role.description)
+
+    roles_data = data['description']
+
+    if roles_data in roles:
+        return {f"error": "O Cargo já existe.", "status": 400}
+
+    permissions_in_db = Permission.query.all()
+    permissions = []
+
+    for permission in permissions_in_db:
+        permissions.append(permission.id)
+
+    for permission_send in data['permissions']:
+        if permission_send not in permissions:
+            return {"error": "Permissões invalidas.", "status": 400}
+
+    permissions_names = []
+    for permission_send in data['permissions']:
+        for permission in permissions_in_db:
+            if permission_send == permission.id:
+                permissions_names.append(permission.description)
+
+    permission_query = Permission.query.filter(Permission.description.in_(permissions_names)).all()
+    data['permissions'] = permission_query
+
+    try:
+        role_created = Role.seed(data['description'], data['name'], data['permissions'])
+        return {"message": "O Cargo foi criado com sucesso.", "status": 201}
+
+    except:
+        return {"error": "Opa! Algo deu errado!", "status_code": 500}

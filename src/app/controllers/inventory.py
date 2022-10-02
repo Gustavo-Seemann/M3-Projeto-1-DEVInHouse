@@ -4,7 +4,7 @@ from src.app import DB
 from src.app.middlewares.auth import requires_access_level
 from src.app.models.inventory import Inventory
 from src.app.models.user import User
-from src.app.services.inventory_service import create_product, update_product
+from src.app.services.inventory_service import create_product, update_product, get_product_by_id
 from src.app.utils import format_currency
 
 inventory = Blueprint("inventory", __name__, url_prefix="/inventory")
@@ -88,6 +88,75 @@ def add_new_product():
 
 @inventory.route("/", methods=["GET"])
 @requires_access_level(["READ"])
+def get_product_by_title():
+    """Example endpoint get in the database an inventory
+    This is using docstrings for specifications.
+    ---
+    parameters:
+      - name: title
+        in: body
+        type: string
+        required: true
+    definitions:
+      id:
+        type: interget
+      product_category_id: 
+        type: interger
+      user_id:
+        type: interger
+      title: 
+        type: string
+      product_code:
+        type: interger
+      value:
+        type: interger
+      brand:
+        type: string
+      template:
+        type: string
+      description:
+        type: string
+    responses:
+        200:
+            description: Sucesso
+        403:
+            description: Erro permission
+        204:
+            description: Error não encontrado
+    """
+    page = request.args.get("page", 1, type=int)
+    per_page = 20
+
+    if not request.args.get("title"):
+        query = DB.session.query(Inventory).slice(
+            (page - 1) * per_page, page * per_page
+        )
+        result = []
+        for product in query:
+            result.append(product.format())
+
+        if not result:
+            return jsonify({"Status": "Dados não encontrados"}), 204
+        else:
+            return jsonify({"Status": "Sucesso", "Dados": result}), 200
+    else:
+        query = (
+            DB.session.query(Inventory)
+            .filter(Inventory.title.ilike("%" + request.args.get("title") + "%"))
+            .slice((page - 1) * per_page, page * per_page)
+        )
+        result = []
+        for item in query:
+            result.append(item.format())
+
+        if not result:
+            return jsonify({"Status": "Dados não encontrados"}), 204
+        else:
+            return jsonify({"Status": "Sucesso", "Dados": result}), 200
+
+
+@inventory.route("/", methods=["GET"])
+@requires_access_level(["READ"])
 def get_product_by_user_name():
     """Example endpoint get in the database an inventory
     This is using docstrings for specifications.
@@ -154,6 +223,7 @@ def get_product_by_user_name():
             return jsonify({"Status": "Dados não encontrados"}), 204
         else:
             return jsonify({"Status": "Sucesso", "Dados": result}), 200
+
 
 
 @inventory.route("/results", methods=["GET"])
@@ -281,3 +351,15 @@ def patch_product(id):
         return jsonify(result), 400
     
     return jsonify({"status": "Produto atualizado com sucesso!", "Dados": result}), 204
+
+
+@inventory.route("/<int:id>", methods=["GET"])
+@requires_access_level(["READ"])
+def get_product_search_by_id(id):
+  
+  product = get_product_by_id(id)
+
+  if not product:
+    return jsonify({'error': "Não foi encontrado nenhum produto.", "status": 404}), 404
+    
+  return jsonify({'Status': 'Sucesso','Dados': product}), 200

@@ -9,7 +9,7 @@ class Role(DB.Model):
     __tablename__ = 'roles'
     id = DB.Column(DB.Integer, autoincrement = True, primary_key = True)
     description = DB.Column(DB.String(128), nullable = False)
-    name = DB.Column(DB.String(128), nullable = False)
+    name = DB.Column(DB.String(128), nullable = True)
     permissions = DB.relationship("Permission", secondary=roles_permissions, backref="roles")
     
     

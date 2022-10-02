@@ -12,20 +12,20 @@ from src.app.utils import format_date
 
 
 class UserCreateSchema(Schema):
-    city_id = fields.Integer(required=True, error_messages=set_error_message('city_id'))
-    gender_id = fields.Integer(required=True, error_messages=set_error_message('gender_id'))
-    role_id = fields.Integer(required=True, error_messages=set_error_message('role_id'))
-    name= fields.Str(required=True, error_messages=set_error_message('name'))
-    age= fields.DateTime(error_messages=set_error_message('age'))
-    email=fields.Email(required=True, error_messages=set_error_message('email'))
-    phone=fields.Str(error_messages=set_error_message('phone'))
-    password=fields.Str(required=True, error_messages=set_error_message('password'))
-    cep=fields.Str(error_messages=set_error_message('cep'))
-    street=fields.Str(error_messages=set_error_message('street'))
-    district=fields.Str(error_messages=set_error_message('district'))
-    complement=fields.Str(error_messages=set_error_message('complement'))
-    landmark=fields.Str(error_messages=set_error_message('landmark'))
-    number_street=fields.Integer(error_messages=set_error_message('number_street'))
+    city_id = fields.Integer(required=True, error_messages=set_error_message("city_id"))
+    gender_id = fields.Integer(required=True, error_messages=set_error_message("gender_id"))
+    role_id = fields.Integer(required=True, error_messages=set_error_message("role_id"))
+    name= fields.Str(required=True, error_messages=set_error_message("name"))
+    age= fields.DateTime(required=True, error_messages=set_error_message("age"))
+    email=fields.Email(required=True, error_messages=set_error_message("email"))
+    phone=fields.Str(error_messages=set_error_message("phone"))
+    password=fields.Str(required=True, error_messages=set_error_message("password"))
+    cep=fields.Str(error_messages=set_error_message("cep"))
+    street=fields.Str(error_messages=set_error_message("street"))
+    district=fields.Str(error_messages=set_error_message("district"))
+    complement=fields.Str(error_messages=set_error_message("complement"))
+    landmark=fields.Str(error_messages=set_error_message("landmark"))
+    number_street=fields.Integer(error_messages=set_error_message("number_street"))
     
     @pre_load
     def format_data(self, data, **kwargs):
