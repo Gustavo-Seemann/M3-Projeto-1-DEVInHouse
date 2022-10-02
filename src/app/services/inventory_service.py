@@ -1,3 +1,4 @@
+from itertools import product
 from src.app.models.inventory import Inventory, inventory_share_schema
 from src.app.models.schemas.inventory_schema import inventory_create_schema
 
@@ -34,3 +35,10 @@ def update_product(data, id):
         return result
     except Exception as e:
         return {"error": f"{e}", "status_code": 500}
+
+def get_product_by_id(id):
+
+    product_query = Inventory.query.get(id)
+    product = inventory_share_schema.dump(product_query)
+
+    return product

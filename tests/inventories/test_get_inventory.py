@@ -59,6 +59,7 @@ def test_sucess_get_inventory_by_id(client, logged_in_client):
     headers["Authorization"] = f"Bearer {logged_in_client}"
     response = client.get("/inventory/2", headers=headers)
     assert response.status_code == 200
+    assert "Dados" in response.json
 
 def test_not_exist_get_inventory_by_id(client, logged_in_client):
     headers = {
@@ -66,6 +67,6 @@ def test_not_exist_get_inventory_by_id(client, logged_in_client):
         'Accept': mimetype
     }
     headers["Authorization"] = f"Bearer {logged_in_client}"
-    response = client.get("/inventory/2", headers=headers)
+    response = client.get("/inventory/99999999999", headers=headers)
     assert response.status_code == 404
     assert response.json['error'] == "Não foi encontrado nenhum produto."

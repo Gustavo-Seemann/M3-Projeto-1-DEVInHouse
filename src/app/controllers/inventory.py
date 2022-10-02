@@ -4,7 +4,7 @@ from src.app import DB
 from src.app.middlewares.auth import requires_access_level
 from src.app.models.inventory import Inventory
 from src.app.models.user import User
-from src.app.services.inventory_service import create_product, update_product
+from src.app.services.inventory_service import create_product, update_product, get_product_by_id
 from src.app.utils import format_currency
 
 inventory = Blueprint("inventory", __name__, url_prefix="/inventory")
@@ -351,3 +351,15 @@ def patch_product(id):
         return jsonify(result), 400
     
     return jsonify({"status": "Produto atualizado com sucesso!", "Dados": result}), 204
+
+
+@inventory.route("/<int:id>", methods=["GET"])
+@requires_access_level(["READ"])
+def get_product_search_by_id(id):
+  
+  product = get_product_by_id(id)
+
+  if not product:
+    return jsonify({'error': "Não foi encontrado nenhum produto.", "status": 404}), 404
+    
+  return jsonify({'Status': 'Sucesso','Dados': product}), 200
