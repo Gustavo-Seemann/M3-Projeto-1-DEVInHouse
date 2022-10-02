@@ -51,3 +51,21 @@ def test_not_found_get_inventory(client, logged_in_client):
     assert response.status_code == 204
 
 
+def test_sucess_get_inventory_by_id(client, logged_in_client):
+    headers = {
+        'Content-type': mimetype,
+        'Accept': mimetype
+    }
+    headers["Authorization"] = f"Bearer {logged_in_client}"
+    response = client.get("/inventory/2", headers=headers)
+    assert response.status_code == 200
+
+def test_not_exist_get_inventory_by_id(client, logged_in_client):
+    headers = {
+        'Content-type': mimetype,
+        'Accept': mimetype
+    }
+    headers["Authorization"] = f"Bearer {logged_in_client}"
+    response = client.get("/inventory/2", headers=headers)
+    assert response.status_code == 404
+    assert response.json['error'] == "Não foi encontrado nenhum produto."
