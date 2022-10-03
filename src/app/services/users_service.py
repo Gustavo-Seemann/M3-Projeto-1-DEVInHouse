@@ -2,7 +2,11 @@ import re
 from datetime import datetime, timedelta, timezone
 
 from requests import Response
+from sqlalchemy import null
 
+from src.app.models.city import City
+from src.app.models.gender import Gender
+from src.app.models.role import Role
 from src.app.models.permission import Permission
 from src.app.models.role import Role, role_share_schema
 from src.app.models.schemas.user_schema import user_create_schema
@@ -33,6 +37,13 @@ def login_user(email: str, password: str):
         return {"error": f"{e}"}
 
 
+def format_data(data):
+    try:
+        data["age"] = format_date(data["age"])
+        return data
+    except:
+        return data
+
 def create_user(data, validate=True):
     try:
         if validate:
@@ -44,6 +55,85 @@ def create_user(data, validate=True):
         return {"message": "Usuário foi criado com sucesso."}
     except Exception as e:
         return {"error": f"{e}", "status_code": 500}
+
+
+def patch_user(data, id, list_keys):
+    try:
+        user = get_user_by_id(id)
+        validados = validate_patch(data, list_keys)
+        if "error" in validados:
+            return validados
+        else:
+            user.update(data)
+
+            return {"message": "Atualizado com sucesso.", "status_code": 204}
+    except Exception as e:
+        return {"error": f"{e}", "status_code": 500}
+
+def validate_patch(data, list_keys):
+
+    keys_found = []
+
+    for key in data:
+        if key in list_keys:
+            keys_found.append(key)     
+
+    if "name" in keys_found:
+        if len(data["name"]) < 3:
+            return {"error": "Por favor insira um nome com mais de 3 caracteres.", "status": 400}
+
+    if "city_id" in keys_found:
+        if not City.query.get(data["city_id"]):
+            return {"error": "Cidade não encontrada.", "status": 400}
+
+    if "gender_id" in keys_found:
+        if not Gender.query.get(data["gender_id"]):
+            return {"error": "Gênero não encontrado.", "status": 400}
+    
+    if "role_id" in keys_found:
+        if not Role.query.get(data["role_id"]):
+            return {"error": "Função não encontrada.", "status": 400}   
+
+    if "email" in keys_found:
+        if User.query.filter_by(email=data["email"]).first():
+            return {"error": "Esse email já está em uso.", "status": 400} 
+
+    if "phone" in keys_found:
+        if re.match(r'^\d{11}$', data["phone"]) is None:
+            return {"error": 'Telefone inválido', "status": 400}
+        
+    if "password" in keys_found:
+        if re.match(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$', data["password"]) is None:
+            return {"error": 'Senha fraca, utilize letras maiúsculas, minúsculas, números e caracteres especiais', "status": 400}
+        
+    if "cep" in keys_found:
+        if re.match(r'^\d{8}$', data["cep"]) is None:
+            return {"error": 'CEP inválido', "status": 400}
+
+    if "number_street" in keys_found:
+        if data["number_street"] is None or data["number_street"] < 0:
+            return {"error": 'Número da rua inválido', "status": 400}
+
+    if "age" in keys_found:
+        if type(data["age"]) != datetime:
+            data["age"] = transform_iso_date(data["age"])
+            if type(data["age"]) != datetime:
+                if "error" in data["age"]:
+                    return {"error": 'Data de nascimento inválida', "status": 400}
+            elif data["age"] > datetime.now():
+                return {"error": 'Data de nascimento inválida', "status": 400}
+        if data["age"] > datetime.now():
+            return {"error": 'Data de nascimento inválida', "status": 400}
+
+    return {"message": "Nenhum problema encontrado."}
+
+
+def transform_iso_date(date):
+    try:
+        new_date = datetime.fromisoformat(date)
+        return new_date
+    except:
+        return {"error": 'Data de nascimento inválida', "status": 400}
 
 
 def get_user_by_email(email):
