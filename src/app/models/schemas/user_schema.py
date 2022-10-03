@@ -27,11 +27,6 @@ class UserCreateSchema(Schema):
     landmark=fields.Str(error_messages=set_error_message("landmark"))
     number_street=fields.Integer(error_messages=set_error_message("number_street"))
     
-    @pre_load
-    def format_data(self, data, **kwargs):
-        data["age"] = format_date(data["age"])
-        return data
-   
     @validates("city_id")
     def exists_city_id(self, value):
         if not City.query.get(value):

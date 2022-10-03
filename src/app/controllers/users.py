@@ -13,7 +13,7 @@ from werkzeug.utils import redirect
 from src.app import DB, MA
 from src.app.middlewares.auth import logged_in, requires_access_level
 from src.app.models.user import User, user_share_schema, users_share_schema
-from src.app.services.users_service import (create_user, format_print_user,
+from src.app.services.users_service import (patch_user, create_user, format_data, format_print_user,
                                             get_user_by_email, get_user_by_id,
                                             login_user, validate_fields_nulls, create_role)
 from src.app.utils import exist_key, generate_jwt
@@ -262,6 +262,7 @@ def create():
             description: Error permission
     """
     data = request.get_json()
+    data = format_data(data)
     response = create_user(data)
     
     if "error" in response:
@@ -447,6 +448,7 @@ def update_user_by_id(id):
     """    
   user = get_user_by_id(id)
   data = request.get_json()
+  data = format_data(data)
   list_keys = ["role_id", "gender_id", "city_id", "age", "name", "email", "phone", "password", "cep", "street", "district", "number_street", "complement", "landmark"]
   
   if user == None:
@@ -461,12 +463,18 @@ def update_user_by_id(id):
       return Response(
           response=json.dumps(validate_values_keys), status=400, mimetype="application/json"
     )
-    user.update(data)
-    result = user_share_schema.dump(user)
-    return Response(
-        response=json.dumps(result), 
-        status=204, 
-        mimetype="application/json"
+    result = patch_user(data, id, list_keys)
+    if "error" in result:
+      return Response(
+          response=json.dumps(result),
+          status=400,
+          mimetype="application/json"
+    )
+    else:
+      return Response(
+          response=json.dumps(result),
+          status=204,
+          mimetype="application/json"
     )
 
 @user.route("/role", methods=["POST"])
