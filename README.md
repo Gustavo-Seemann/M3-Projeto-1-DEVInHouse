@@ -1,9 +1,8 @@
-<h1 align="center">M2P2-DevinHouse 👨‍💻</h1>
+<h1 align="center">M3P1-DevinHouse 👨‍💻</h1>
 
 # Software de gestão de inventário de empresas - DEVinventory
 
-O projeto Back-end desenvolvido durante o Módulo 2, consiste no desenvolvimento de uma API em Python, usando Flask com SQLAlchemy
-
+O projeto Back-end desenvolvido durante o Módulo 2, consiste no desenvolvimento de uma API em Python, usando Flask com SQLAlchemy. E o projeto desenvolvido durante o Módulo 3 consiste na criação de teste unitários e dois novos endpoints utilizando TDD.
 # Requisitos:
 
 <ul>
@@ -328,6 +327,44 @@ Executar o comando: <i>poetry run flask run</i>
  <li>Se nenhum resultado status 204 (No content)</li>
  <li>Se encontrado o resultado retornar em JSON contendo: id, nome, email, phone, role.name e Status 200 (OK)</li>
  </ul>
+ 
+ <b style="font-size:30px">: POST/user/role </b>
+
+<b>Parametros de entrada:</b>
+<ul>
+  <li>description (string - obrigatório)</li>
+  <li>name (string)</li>
+  <li>permissions (array de ids - obrigatório)</li>
+ </ul>
+  
+ <b>Regras de negócio:</b>
+● O usuário deve estar logado e possuir autorização (READ, WRITE, UPDATE e DELETE)
+para este endpoint de inventário. Caso não possua, deve-se retornar o Status de
+Erro 403 (Forbidden).
+● Validar se o cargo que está sendo criado já existe, e se existir, retornar um erro 400,
+informando que o cargo já existe
+● Validar que as permissões enviadas existam.
+● Se as permissões não existirem, retornar um erro 400 informando que as
+permissões são inválidas.
+● Retornar a mensagem informando que o cargo foi criado com sucesso, utilizando o
+Status 201 (OK).
+
+
+GET/inventory/:id
+
+
+Entrada:
+id: integer (path param required)
+
+
+Regras de negócio:
+● O usuário deve estar logado e possuir autorização READ para este endpoint de
+inventário. Caso não possua, deve-se retornar o Status de Erro 403 (Forbidden).
+● Se o id informado não existir, retorna um 404 informando que o valor não existe.
+● Retornar o produto específico com os campos da tabela em si junto com seus
+relacionamentos, retornando status 200
+ 
+ 
  
 
 Utilizamos oSwagger para a documentação dos endpoints para acessar <a href="http://localhost:5000/apidocs/" target="_blank">http://localhost:5000/apidocs/</a>
