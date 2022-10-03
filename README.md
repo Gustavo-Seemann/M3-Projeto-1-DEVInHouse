@@ -350,14 +350,14 @@ permissões são inválidas.
 Status 201 (OK).
 
 
-GET/inventory/:id
+<b> GET/inventory/:id </b>
 
 
 Entrada:
 id: integer (path param required)
 
 
-Regras de negócio:
+<b> Regras de negócio: </b>
 ● O usuário deve estar logado e possuir autorização READ para este endpoint de
 inventário. Caso não possua, deve-se retornar o Status de Erro 403 (Forbidden).
 ● Se o id informado não existir, retorna um 404 informando que o valor não existe.
@@ -394,6 +394,7 @@ Somos os DEVinSanes, time de desenvolvedores full-stak, desenvolvemos o projeto 
 <li><a href="https://www.linkedin.com/in/kau%C3%A3-kirchner-de-souza-4b8327219/" target="_blank"><i>Kauã Kirchner de Souza</i></a></li>
 <li><a href="https://www.linkedin.com/in/mayconrcampos/" target="_blank"><i>Maycon Campos</i></a></li>
 <li><a href="https://www.linkedin.com/in/wellyngton-caetano-dos-santos/" target="_blank"><i>Wellyngton Santos</i></a></li>
+  <li> Luiz Gustavo Seemann </li>
 </ul>
 
 # Referências:
