@@ -328,7 +328,7 @@ Executar o comando: <i>poetry run flask run</i>
  <li>Se encontrado o resultado retornar em JSON contendo: id, nome, email, phone, role.name e Status 200 (OK)</li>
  </ul>
  
- <b style="font-size:30px">: POST/user/role </b>
+ <b style="font-size:30px">POST/user/role </b>
 
 <b>Parametros de entrada:</b>
 <ul>
@@ -338,16 +338,18 @@ Executar o comando: <i>poetry run flask run</i>
  </ul>
   
  <b>Regras de negócio:</b>
-● O usuário deve estar logado e possuir autorização (READ, WRITE, UPDATE e DELETE)
-para este endpoint de inventário. Caso não possua, deve-se retornar o Status de
-Erro 403 (Forbidden).
-● Validar se o cargo que está sendo criado já existe, e se existir, retornar um erro 400,
-informando que o cargo já existe
-● Validar que as permissões enviadas existam.
-● Se as permissões não existirem, retornar um erro 400 informando que as
-permissões são inválidas.
-● Retornar a mensagem informando que o cargo foi criado com sucesso, utilizando o
-Status 201 (OK).
+<ul>
+  <li> ● O usuário deve estar logado e possuir autorização (READ, WRITE, UPDATE e DELETE)
+  para este endpoint de inventário. Caso não possua, deve-se retornar o Status de
+  Erro 403 (Forbidden). </li>
+  <li> ● Validar se o cargo que está sendo criado já existe, e se existir, retornar um erro 400,
+  informando que o cargo já existe </li>
+  <li> ● Validar que as permissões enviadas existam. </li>
+  <li> ● Se as permissões não existirem, retornar um erro 400 informando que as
+permissões são inválidas. </li>
+<li> ● Retornar a mensagem informando que o cargo foi criado com sucesso, utilizando o
+  Status 201 (OK). </li>
+</ul>
 
 
 <b> GET/inventory/:id </b>
@@ -358,12 +360,13 @@ id: integer (path param required)
 
 
 <b> Regras de negócio: </b>
-● O usuário deve estar logado e possuir autorização READ para este endpoint de
-inventário. Caso não possua, deve-se retornar o Status de Erro 403 (Forbidden).
-● Se o id informado não existir, retorna um 404 informando que o valor não existe.
-● Retornar o produto específico com os campos da tabela em si junto com seus
-relacionamentos, retornando status 200
- 
+<ul>
+<li> ● O usuário deve estar logado e possuir autorização READ para este endpoint de
+inventário. Caso não possua, deve-se retornar o Status de Erro 403 (Forbidden). </li>
+<li> ● Se o id informado não existir, retorna um 404 informando que o valor não existe. </li>
+<li> ● Retornar o produto específico com os campos da tabela em si junto com seus
+relacionamentos, retornando status 200 </li>
+ </ul>
  
  
 
@@ -394,7 +397,7 @@ Somos os DEVinSanes, time de desenvolvedores full-stak, desenvolvemos o projeto 
 <li><a href="https://www.linkedin.com/in/kau%C3%A3-kirchner-de-souza-4b8327219/" target="_blank"><i>Kauã Kirchner de Souza</i></a></li>
 <li><a href="https://www.linkedin.com/in/mayconrcampos/" target="_blank"><i>Maycon Campos</i></a></li>
 <li><a href="https://www.linkedin.com/in/wellyngton-caetano-dos-santos/" target="_blank"><i>Wellyngton Santos</i></a></li>
-  <li> Luiz Gustavo Seemann </li>
+<li><a href="https://www.linkedin.com/in/luiz-gustavo-seemann-3a4821221/"><i>Luiz Gustavo Seemann</i></a></li>
 </ul>
 
 # Referências:
