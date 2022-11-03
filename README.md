@@ -2,7 +2,7 @@
 
 # Software de gestão de inventário de empresas - DEVinventory
 
-O projeto Back-end desenvolvido durante o Módulo 2, consiste no desenvolvimento de uma API em Python, usando Flask com SQLAlchemy para empresa fictícia realizar a gestão de seus equipamentos para homeoffice. E o projeto desenvolvido durante o Módulo 3 consiste na criação de teste unitários e dois novos endpoints utilizando TDD.
+O projeto Back-end desenvolvido durante o Módulo 2, consiste no desenvolvimento de uma API em Python, usando Flask com SQLAlchemy para uma empresa fictícia realizar a gestão de seus equipamentos para homeoffice. E o projeto desenvolvido durante o Módulo 3 consiste na criação de teste unitários e dois novos endpoints utilizando TDD.
 # Requisitos:
 
 <ul>
